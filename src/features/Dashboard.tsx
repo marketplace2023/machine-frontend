@@ -8,7 +8,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-export function Dashboard() {
+export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Top Stats Cards */}

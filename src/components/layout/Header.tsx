@@ -1,32 +1,19 @@
-import { Button } from "../ui/button"
-import { Link, useLocation } from "react-router-dom"
+import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
 export function Header() {
-  const location = useLocation()
-  
   return (
-    <header className="border-b border-gray-700 bg-gray-800/50 backdrop-blur-sm">
+    <header className="border-b border-gray-200 bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <nav className="flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-white">
+          <Link to="/dashboard" className="text-xl font-bold text-gray-800">
             Demo App
           </Link>
-          
+
           <div className="flex gap-4">
             <Button
-              variant={location.pathname === "/" ? "secondary" : "ghost"}
-              asChild
-            >
-              <Link to="/">Home</Link>
-            </Button>
-            <Button
-              variant={location.pathname === "/about" ? "secondary" : "ghost"}
-              asChild
-            >
-              <Link to="/about">About</Link>
-            </Button>
-            <Button
-              variant={location.pathname === "/login" ? "secondary" : "ghost"}
+              variant="ghost"
+              className="text-gray-700 hover:bg-gray-100"
               asChild
             >
               <Link to="/login">Login</Link>
@@ -35,5 +22,5 @@ export function Header() {
         </nav>
       </div>
     </header>
-  )
-} 
+  );
+}

@@ -1,26 +1,39 @@
-import { createBrowserRouter } from "react-router-dom"
-import App from "../App"
-import { Home } from "../pages/Home"
-import { About } from "../pages/About"
-import { Login } from "../pages/Login"
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import { DashboardLayout } from "../components/layout/DashboardLayout";
+import { Dashboard } from "../features/Dashboard";
+import { Molde } from "../features/Molde";
+import { Login } from "../features/Login";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <DashboardLayout />,
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <Dashboard />,
       },
       {
-        path: "about",
-        element: <About />,
+        path: "molde",
+        element: <Molde />,
       },
       {
-        path: "login",
-        element: <Login />,
+        path: "monitor/vista-general",
+        element: <Dashboard />,
+      },
+      {
+        path: "monitor/diagnostico",
+        element: <Dashboard />,
+      },
+      {
+        path: "monitor/salud",
+        element: <Dashboard />,
       },
     ],
   },
-]) 
+
+  {
+    path: "/login",
+    element: <Login />,
+  },
+]);

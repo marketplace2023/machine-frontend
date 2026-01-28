@@ -6,11 +6,50 @@ import {
   Clock,
   Activity,
   AlertTriangle,
+  Loader2,
 } from "lucide-react";
+import { useWebSocket } from "../hooks/useWebSocket";
+import { LiveMonitoringData } from "../api/monitoring";
+import { useQuery } from "@tanstack/react-query";
+import { alertsApi } from "../api/alerts";
 
 export default function Dashboard() {
+  // WebSocket para datos en tiempo real
+  const { data: liveData, isConnected } =
+    useWebSocket<LiveMonitoringData>("monitoring:live");
+
+  // API REST para alertas
+  const { data: alerts } = useQuery({
+    queryKey: ["alerts"],
+    queryFn: alertsApi.getActiveAlerts,
+    refetchInterval: 5000, // Actualizar cada 5 segundos
+  });
+
+  // Valores por defecto mientras se conecta
+  const oee = liveData?.oee ?? 0;
+  const cycleTime = liveData?.cycleTime ?? 0;
+  const servosHealth = liveData?.servosHealth ?? "good";
+
+  // Color del estado de servos
+  const servosHealthColor =
+    servosHealth === "good"
+      ? "text-green-600"
+      : servosHealth === "warning"
+        ? "text-orange-600"
+        : "text-red-600";
+
   return (
     <div className="space-y-6">
+      {/* Connection Status */}
+      {!isConnected && (
+        <div className="bg-orange-500 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-sm font-medium">
+            Conectando con el backend...
+          </span>
+        </div>
+      )}
+
       {/* Top Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Estado de Máquina */}
@@ -19,12 +58,18 @@ export default function Dashboard() {
             <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
               Estado de Máquina
             </span>
-            <CheckCircle2 className="h-5 w-5 text-green-500" />
+            <CheckCircle2
+              className={`h-5 w-5 ${isConnected ? "text-green-500" : "text-gray-400"}`}
+            />
           </div>
           <div className="space-y-1">
-            <h3 className="text-2xl font-bold text-gray-900">En Producción</h3>
-            <p className="text-sm font-medium text-green-600">
-              Estable (Ciclo 452)
+            <h3 className="text-2xl font-bold text-gray-900">
+              {isConnected ? "En Producción" : "Sin Conexión"}
+            </h3>
+            <p
+              className={`text-sm font-medium ${isConnected ? "text-green-600" : "text-gray-400"}`}
+            >
+              {isConnected ? "Estable (Tiempo Real)" : "Esperando datos..."}
             </p>
           </div>
         </Card>
@@ -38,9 +83,11 @@ export default function Dashboard() {
             <TrendingUp className="h-5 w-5 text-blue-500" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-2xl font-bold text-gray-900">91.4%</h3>
+            <h3 className="text-2xl font-bold text-gray-900">
+              {oee.toFixed(1)}%
+            </h3>
             <p className="text-sm font-medium text-blue-600">
-              +1.2% vs turno anterior
+              Datos en tiempo real
             </p>
           </div>
         </Card>
@@ -54,9 +101,11 @@ export default function Dashboard() {
             <Clock className="h-5 w-5 text-orange-500" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-2xl font-bold text-gray-900">12.4s</h3>
+            <h3 className="text-2xl font-bold text-gray-900">
+              {cycleTime.toFixed(1)}s
+            </h3>
             <p className="text-sm font-medium text-orange-600">
-              -0.3s (Desviación)
+              Actualización en vivo
             </p>
           </div>
         </Card>
@@ -145,16 +194,28 @@ export default function Dashboard() {
                       cx="40"
                       cy="40"
                       r="32"
-                      stroke="#10b981"
+                      stroke={
+                        servosHealth === "good"
+                          ? "#10b981"
+                          : servosHealth === "warning"
+                            ? "#f59e0b"
+                            : "#ef4444"
+                      }
                       strokeWidth="6"
                       fill="none"
                       strokeDasharray={`${2 * Math.PI * 32}`}
-                      strokeDashoffset={`${2 * Math.PI * 32 * (1 - 0.98)}`}
+                      strokeDashoffset={`${2 * Math.PI * 32 * (1 - (servosHealth === "good" ? 0.98 : servosHealth === "warning" ? 0.75 : 0.45))}`}
                       strokeLinecap="round"
                     />
                   </svg>
                   <div className="absolute text-center">
-                    <p className="text-lg font-bold text-gray-900">98%</p>
+                    <p className={`text-lg font-bold ${servosHealthColor}`}>
+                      {servosHealth === "good"
+                        ? "98%"
+                        : servosHealth === "warning"
+                          ? "75%"
+                          : "45%"}
+                    </p>
                   </div>
                 </div>
                 <p className="text-xs text-gray-600 mt-2 font-medium uppercase tracking-wide">
@@ -214,33 +275,68 @@ export default function Dashboard() {
               <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
                 Alertas Críticas
               </h3>
-              <span className="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">
-                2 ACTIVAS
+              <span
+                className={`px-2 py-1 ${alerts && alerts.length > 0 ? "bg-red-500" : "bg-green-500"} text-white text-xs font-bold rounded-full`}
+              >
+                {alerts?.length ?? 0} ACTIVAS
               </span>
             </div>
             <div className="space-y-3">
-              <div className="flex gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
-                <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold text-red-900">
-                    Sobre-torque en Servo A1
-                  </p>
-                  <p className="text-xs text-red-700 mt-1">
-                    Unidad de cierre • hace 4 min
+              {!alerts || alerts.length === 0 ? (
+                <div className="text-center py-4">
+                  <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600">
+                    No hay alertas activas
                   </p>
                 </div>
-              </div>
-              <div className="flex gap-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
-                <AlertTriangle className="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold text-orange-900">
-                    Variación en Zona 3
-                  </p>
-                  <p className="text-xs text-orange-700 mt-1">
-                    Desviación de ±2.5°C • Calor
-                  </p>
-                </div>
-              </div>
+              ) : (
+                alerts.map((alert) => (
+                  <div
+                    key={alert.id}
+                    className={`flex gap-3 p-3 rounded-lg border ${
+                      alert.type === "error"
+                        ? "bg-red-50 border-red-100"
+                        : alert.type === "warning"
+                          ? "bg-orange-50 border-orange-100"
+                          : "bg-blue-50 border-blue-100"
+                    }`}
+                  >
+                    <AlertTriangle
+                      className={`h-5 w-5 flex-shrink-0 mt-0.5 ${
+                        alert.type === "error"
+                          ? "text-red-600"
+                          : alert.type === "warning"
+                            ? "text-orange-600"
+                            : "text-blue-600"
+                      }`}
+                    />
+                    <div>
+                      <p
+                        className={`text-sm font-semibold ${
+                          alert.type === "error"
+                            ? "text-red-900"
+                            : alert.type === "warning"
+                              ? "text-orange-900"
+                              : "text-blue-900"
+                        }`}
+                      >
+                        {alert.message}
+                      </p>
+                      <p
+                        className={`text-xs mt-1 ${
+                          alert.type === "error"
+                            ? "text-red-700"
+                            : alert.type === "warning"
+                              ? "text-orange-700"
+                              : "text-blue-700"
+                        }`}
+                      >
+                        {new Date(alert.timestamp).toLocaleTimeString("es-ES")}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </Card>
 
@@ -285,6 +381,60 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
+
+      {/* Línea de Vida (Live Stream) */}
+      <Card className="p-6">
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <div className="flex items-center gap-2">
+              <Activity className="h-5 w-5 text-blue-600" />
+              <h2 className="text-lg font-semibold text-gray-900">
+                Línea de Vida (Live Stream)
+              </h2>
+            </div>
+            <p className="text-sm text-gray-600 mt-1">
+              Ciclo actual: 451.3s • Consumo: 42.5 kW
+            </p>
+          </div>
+          <div className="flex gap-4 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+              <span className="text-gray-600 font-medium">PRESIÓN (BAR)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              <span className="text-gray-600 font-medium">VELOCIDAD</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Live Stream Chart */}
+        <div className="h-32 flex items-end gap-0.5">
+          {[
+            78, 89, 123, 145, 167, 189, 201, 186, 154, 132, 125, 198, 215, 234,
+            256, 278, 245, 198, 176, 154, 189, 212, 234, 189, 167, 145, 234,
+            256, 289, 234, 189, 167, 145, 123, 198, 276, 298, 321, 343, 389,
+            412, 456, 501, 543, 598, 623, 687, 701, 698, 654, 598, 543, 489,
+            434, 389, 356, 321, 289, 256, 234, 198, 176, 154, 132, 189, 212,
+            234, 256, 278, 289, 301, 298, 289, 278, 256, 234, 212, 189, 167,
+            145, 123, 189, 212, 234, 256, 278, 289, 301, 312, 323, 334, 345,
+            356, 367, 378, 389, 398, 387, 376, 365, 354, 343, 332, 321, 310,
+            299, 288, 277, 266, 255, 244, 233, 222, 211, 198, 187, 176, 165,
+            154, 143, 132, 121, 110, 99, 88, 77, 189, 212, 234, 256, 278, 289,
+            301, 312, 323, 334, 345, 356, 367, 378, 389, 398, 387, 376, 365,
+            354, 343, 332, 321, 310, 299, 288, 277, 266, 255, 244, 233, 222,
+          ].map((value, i) => (
+            <div
+              key={i}
+              className="flex-1 bg-blue-200 rounded-t transition-all duration-300 hover:bg-blue-400"
+              style={{
+                height: `${(value / 700) * 100}%`,
+                minWidth: "2px",
+              }}
+            ></div>
+          ))}
+        </div>
+      </Card>
 
       <style>{`
         @keyframes flow {

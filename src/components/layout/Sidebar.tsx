@@ -6,6 +6,14 @@ import {
   Activity,
   ChevronDown,
   ChevronRight,
+  Triangle,
+  Circle,
+  Droplet,
+  Database,
+  Zap,
+  Thermometer,
+  Sliders,
+  BarChart3,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -93,6 +101,128 @@ export function Sidebar() {
           <Link to="/molde">
             <Package className="mr-2 h-4 w-4" />
             Molde
+          </Link>
+        </Button>
+
+        <Button
+          variant={location.pathname === "/eyector" ? "default" : "ghost"}
+          className={
+            location.pathname === "/eyector"
+              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
+              : "w-full justify-start text-gray-700 hover:bg-gray-100"
+          }
+          asChild
+        >
+          <Link to="/eyector">
+            <Triangle className="mr-2 h-4 w-4" />
+            Eyector
+          </Link>
+        </Button>
+
+        <Button
+          variant={location.pathname === "/core" ? "default" : "ghost"}
+          className={
+            location.pathname === "/core"
+              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
+              : "w-full justify-start text-gray-700 hover:bg-gray-100"
+          }
+          asChild
+        >
+          <Link to="/core">
+            <Circle className="mr-2 h-4 w-4" />
+            Core
+          </Link>
+        </Button>
+
+        <Button
+          variant={location.pathname === "/inyeccion" ? "default" : "ghost"}
+          className={
+            location.pathname === "/inyeccion"
+              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
+              : "w-full justify-start text-gray-700 hover:bg-gray-100"
+          }
+          asChild
+        >
+          <Link to="/inyeccion">
+            <Droplet className="mr-2 h-4 w-4" />
+            Inyección
+          </Link>
+        </Button>
+
+        <Button
+          variant={location.pathname === "/charge" ? "default" : "ghost"}
+          className={
+            location.pathname === "/charge"
+              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
+              : "w-full justify-start text-gray-700 hover:bg-gray-100"
+          }
+          asChild
+        >
+          <Link to="/charge">
+            <Database className="mr-2 h-4 w-4" />
+            Charge
+          </Link>
+        </Button>
+
+        <Button
+          variant={location.pathname === "/boquilla" ? "default" : "ghost"}
+          className={
+            location.pathname === "/boquilla"
+              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
+              : "w-full justify-start text-gray-700 hover:bg-gray-100"
+          }
+          asChild
+        >
+          <Link to="/boquilla">
+            <Zap className="mr-2 h-4 w-4" />
+            Boquilla
+          </Link>
+        </Button>
+
+        <Button
+          variant={location.pathname === "/temperatura" ? "default" : "ghost"}
+          className={
+            location.pathname === "/temperatura"
+              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
+              : "w-full justify-start text-gray-700 hover:bg-gray-100"
+          }
+          asChild
+        >
+          <Link to="/temperatura">
+            <Thermometer className="mr-2 h-4 w-4" />
+            Temperatura
+          </Link>
+        </Button>
+
+        <Button
+          variant={
+            location.pathname === "/ajustes-produccion" ? "default" : "ghost"
+          }
+          className={
+            location.pathname === "/ajustes-produccion"
+              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
+              : "w-full justify-start text-gray-700 hover:bg-gray-100"
+          }
+          asChild
+        >
+          <Link to="/ajustes-produccion">
+            <Sliders className="mr-2 h-4 w-4" />
+            Ajustes de Producción
+          </Link>
+        </Button>
+
+        <Button
+          variant={location.pathname === "/spc" ? "default" : "ghost"}
+          className={
+            location.pathname === "/spc"
+              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
+              : "w-full justify-start text-gray-700 hover:bg-gray-100"
+          }
+          asChild
+        >
+          <Link to="/spc">
+            <BarChart3 className="mr-2 h-4 w-4" />
+            SPC
           </Link>
         </Button>
       </nav>

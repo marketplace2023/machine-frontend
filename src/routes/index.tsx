@@ -4,6 +4,9 @@ import Dashboard from "../features/Dashboard";
 import Molde from "../features/Molde";
 import Login from "../features/Login";
 import Diagnostic from "../features/Diagnostic";
+import PerfilApertura from "../features/molde/PerfilApertura";
+import AjusteFuerza from "../features/molde/AjusteFuerza";
+import ProteccionMolde from "../features/molde/ProteccionMolde";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +20,18 @@ export const router = createBrowserRouter([
       {
         path: "molde",
         element: <Molde />,
+      },
+      {
+        path: "molde/perfil-apertura",
+        element: <PerfilApertura />,
+      },
+      {
+        path: "molde/ajuste-fuerza",
+        element: <AjusteFuerza />,
+      },
+      {
+        path: "molde/proteccion",
+        element: <ProteccionMolde />,
       },
       {
         path: "monitor/vista-general",

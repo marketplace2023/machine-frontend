@@ -20,8 +20,10 @@ import { useState } from "react";
 export function Sidebar() {
   const location = useLocation();
   const [isMonitorOpen, setIsMonitorOpen] = useState(true);
+  const [isMoldeOpen, setIsMoldeOpen] = useState(true);
 
   const isMonitorActive = location.pathname.startsWith("/monitor");
+  const isMoldeActive = location.pathname.startsWith("/molde");
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm">
@@ -89,20 +91,64 @@ export function Sidebar() {
           )}
         </div>
 
-        <Button
-          variant={location.pathname === "/molde" ? "default" : "ghost"}
-          className={
-            location.pathname === "/molde"
-              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
-              : "w-full justify-start text-gray-700 hover:bg-gray-100"
-          }
-          asChild
-        >
-          <Link to="/molde">
+        {/* Molde Menu with Submenu */}
+        <div className="space-y-1">
+          <Button
+            variant="ghost"
+            className={
+              isMoldeActive
+                ? "w-full justify-start bg-blue-50 text-blue-600 hover:bg-blue-100"
+                : "w-full justify-start text-gray-700 hover:bg-gray-100"
+            }
+            onClick={() => setIsMoldeOpen(!isMoldeOpen)}
+          >
             <Package className="mr-2 h-4 w-4" />
             Molde
-          </Link>
-        </Button>
+            {isMoldeOpen ? (
+              <ChevronDown className="ml-auto h-4 w-4" />
+            ) : (
+              <ChevronRight className="ml-auto h-4 w-4" />
+            )}
+          </Button>
+
+          {isMoldeOpen && (
+            <div className="ml-4 pl-4 border-l-2 border-blue-500 space-y-1">
+              <Button
+                variant="ghost"
+                className={
+                  location.pathname === "/molde/perfil-apertura"
+                    ? "w-full justify-start text-sm bg-blue-100 text-blue-700"
+                    : "w-full justify-start text-sm text-gray-600 hover:bg-gray-50"
+                }
+                asChild
+              >
+                <Link to="/molde/perfil-apertura">Perfil Apertura/Cierre</Link>
+              </Button>
+              <Button
+                variant="ghost"
+                className={
+                  location.pathname === "/molde/ajuste-fuerza"
+                    ? "w-full justify-start text-sm bg-gray-100 text-gray-900"
+                    : "w-full justify-start text-sm text-gray-600 hover:bg-gray-50"
+                }
+                asChild
+              >
+                <Link to="/molde/ajuste-fuerza">Ajuste Fuerza</Link>
+              </Button>
+              <Button
+                variant="ghost"
+                className={
+                  location.pathname === "/molde/proteccion"
+                    ? "w-full justify-start text-sm bg-gray-100 text-gray-900"
+                    : "w-full justify-start text-sm text-gray-600 hover:bg-gray-50"
+                }
+                asChild
+              >
+                <Link to="/molde/proteccion">Protección Molde</Link>
+              </Button>
+            </div>
+          )}
+        </div>
 
         <Button
           variant={location.pathname === "/eyector" ? "default" : "ghost"}

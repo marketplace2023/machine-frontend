@@ -41,12 +41,12 @@ export function Sidebar() {
   const isAjustesActive = location.pathname.startsWith("/ajustes");
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm">
-      <div className="p-6 border-b border-gray-200">
+    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm h-screen">
+      <div className="p-6 border-b border-gray-200 flex-shrink-0">
         <h2 className="text-2xl font-bold text-gray-800">Dashboard</h2>
       </div>
 
-      <nav className="flex-1 p-4 space-y-2">
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         {/* Monitor Menu with Submenu */}
         <div className="space-y-1">
           <Button
@@ -675,7 +675,7 @@ export function Sidebar() {
         </Button>
       </nav>
 
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-gray-200 flex-shrink-0">
         <Button
           variant="ghost"
           className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"

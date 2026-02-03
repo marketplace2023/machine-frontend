@@ -14,6 +14,7 @@ import {
   Thermometer,
   Sliders,
   BarChart3,
+  Wrench,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -25,6 +26,9 @@ export function Sidebar() {
   const [isCoreOpen, setIsCoreOpen] = useState(true);
   const [isInyeccionOpen, setIsInyeccionOpen] = useState(true);
   const [isChargeOpen, setIsChargeOpen] = useState(true);
+  const [isBoquillaOpen, setIsBoquillaOpen] = useState(true);
+  const [isTemperaturaOpen, setIsTemperaturaOpen] = useState(true);
+  const [isAjustesOpen, setIsAjustesOpen] = useState(true);
 
   const isMonitorActive = location.pathname.startsWith("/monitor");
   const isMoldeActive = location.pathname.startsWith("/molde");
@@ -32,6 +36,9 @@ export function Sidebar() {
   const isCoreActive = location.pathname.startsWith("/core");
   const isInyeccionActive = location.pathname.startsWith("/inyeccion");
   const isChargeActive = location.pathname.startsWith("/charge");
+  const isBoquillaActive = location.pathname.startsWith("/boquilla");
+  const isTemperaturaActive = location.pathname.startsWith("/temperatura");
+  const isAjustesActive = location.pathname.startsWith("/ajustes");
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm">
@@ -434,52 +441,223 @@ export function Sidebar() {
           )}
         </div>
 
-        <Button
-          variant={location.pathname === "/boquilla" ? "default" : "ghost"}
-          className={
-            location.pathname === "/boquilla"
-              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
-              : "w-full justify-start text-gray-700 hover:bg-gray-100"
-          }
-          asChild
-        >
-          <Link to="/boquilla">
-            <Zap className="mr-2 h-4 w-4" />
-            Boquilla
-          </Link>
-        </Button>
+        {/* Boquilla Menu with Submenu */}
+        <div className="space-y-1">
+          <Button
+            variant={isBoquillaActive ? "default" : "ghost"}
+            className={
+              isBoquillaActive
+                ? "w-full justify-between bg-blue-600 hover:bg-blue-700 text-white"
+                : "w-full justify-between text-gray-700 hover:bg-gray-100"
+            }
+            onClick={() => setIsBoquillaOpen(!isBoquillaOpen)}
+          >
+            <span className="flex items-center">
+              <Zap className="mr-2 h-4 w-4" />
+              Boquilla
+            </span>
+            {isBoquillaOpen ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </Button>
 
-        <Button
-          variant={location.pathname === "/temperatura" ? "default" : "ghost"}
-          className={
-            location.pathname === "/temperatura"
-              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
-              : "w-full justify-start text-gray-700 hover:bg-gray-100"
-          }
-          asChild
-        >
-          <Link to="/temperatura">
-            <Thermometer className="mr-2 h-4 w-4" />
-            Temperatura
-          </Link>
-        </Button>
+          {isBoquillaOpen && (
+            <div className="ml-4 space-y-1 border-l-2 border-blue-200 pl-2">
+              <Button
+                variant={
+                  location.pathname === "/boquilla/movimiento-fuerza"
+                    ? "default"
+                    : "ghost"
+                }
+                className={
+                  location.pathname === "/boquilla/movimiento-fuerza"
+                    ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                    : "w-full justify-start text-gray-600 hover:bg-gray-50 text-sm"
+                }
+                asChild
+              >
+                <Link to="/boquilla/movimiento-fuerza">
+                  Movimiento y Fuerza
+                </Link>
+              </Button>
 
-        <Button
-          variant={
-            location.pathname === "/ajustes-produccion" ? "default" : "ghost"
-          }
-          className={
-            location.pathname === "/ajustes-produccion"
-              ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
-              : "w-full justify-start text-gray-700 hover:bg-gray-100"
-          }
-          asChild
-        >
-          <Link to="/ajustes-produccion">
-            <Sliders className="mr-2 h-4 w-4" />
-            Ajustes de Producción
-          </Link>
-        </Button>
+              <Button
+                variant={
+                  location.pathname === "/boquilla/configuracion-sprue"
+                    ? "default"
+                    : "ghost"
+                }
+                className={
+                  location.pathname === "/boquilla/configuracion-sprue"
+                    ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                    : "w-full justify-start text-gray-600 hover:bg-gray-50 text-sm"
+                }
+                asChild
+              >
+                <Link to="/boquilla/configuracion-sprue">
+                  Configuración Sprue
+                </Link>
+              </Button>
+
+              <Button
+                variant={
+                  location.pathname === "/boquilla/calibracion-carro"
+                    ? "default"
+                    : "ghost"
+                }
+                className={
+                  location.pathname === "/boquilla/calibracion-carro"
+                    ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                    : "w-full justify-start text-gray-600 hover:bg-gray-50 text-sm"
+                }
+                asChild
+              >
+                <Link to="/boquilla/calibracion-carro">
+                  Calibración de Carro
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {/* Temperatura Menu with Submenu */}
+        <div className="space-y-1">
+          <Button
+            variant={isTemperaturaActive ? "default" : "ghost"}
+            className={
+              isTemperaturaActive
+                ? "w-full justify-between bg-blue-600 hover:bg-blue-700 text-white"
+                : "w-full justify-between text-gray-700 hover:bg-gray-100"
+            }
+            onClick={() => setIsTemperaturaOpen(!isTemperaturaOpen)}
+          >
+            <span className="flex items-center">
+              <Thermometer className="mr-2 h-4 w-4" />
+              Temperatura
+            </span>
+            {isTemperaturaOpen ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </Button>
+
+          {isTemperaturaOpen && (
+            <div className="ml-4 space-y-1 border-l-2 border-blue-200 pl-2">
+              <Button
+                variant={
+                  location.pathname === "/temperatura/control-zonas"
+                    ? "default"
+                    : "ghost"
+                }
+                className={
+                  location.pathname === "/temperatura/control-zonas"
+                    ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                    : "w-full justify-start text-gray-600 hover:bg-gray-50 text-sm"
+                }
+                asChild
+              >
+                <Link to="/temperatura/control-zonas">Control de Zonas</Link>
+              </Button>
+              <Button
+                variant={
+                  location.pathname === "/temperatura/ajustes-pid"
+                    ? "default"
+                    : "ghost"
+                }
+                className={
+                  location.pathname === "/temperatura/ajustes-pid"
+                    ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                    : "w-full justify-start text-gray-600 hover:bg-gray-50 text-sm"
+                }
+                asChild
+              >
+                <Link to="/temperatura/ajustes-pid">Ajustes PID</Link>
+              </Button>
+              <Button
+                variant={
+                  location.pathname === "/temperatura/eficiencia-energetica"
+                    ? "default"
+                    : "ghost"
+                }
+                className={
+                  location.pathname === "/temperatura/eficiencia-energetica"
+                    ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                    : "w-full justify-start text-gray-600 hover:bg-gray-50 text-sm"
+                }
+                asChild
+              >
+                <Link to="/temperatura/eficiencia-energetica">
+                  Eficiencia Energética
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {/* Ajustes Menu with Submenu */}
+        <div className="space-y-1">
+          <Button
+            variant={isAjustesActive ? "default" : "ghost"}
+            className={
+              isAjustesActive
+                ? "w-full justify-between bg-blue-600 hover:bg-blue-700 text-white"
+                : "w-full justify-between text-gray-700 hover:bg-gray-100"
+            }
+            onClick={() => setIsAjustesOpen(!isAjustesOpen)}
+          >
+            <span className="flex items-center">
+              <Sliders className="mr-2 h-4 w-4" />
+              Ajustes
+            </span>
+            {isAjustesOpen ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </Button>
+
+          {isAjustesOpen && (
+            <div className="ml-4 space-y-1 border-l-2 border-blue-200 pl-2">
+              <Button
+                variant={
+                  location.pathname === "/ajustes/ajustes-produccion"
+                    ? "default"
+                    : "ghost"
+                }
+                className={
+                  location.pathname === "/ajustes/ajustes-produccion"
+                    ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                    : "w-full justify-start text-gray-600 hover:bg-gray-50 text-sm"
+                }
+                asChild
+              >
+                <Link to="/ajustes/ajustes-produccion">
+                  Ajustes de Producción
+                </Link>
+              </Button>
+              <Button
+                variant={
+                  location.pathname === "/ajustes/mantenimiento-lubricacion"
+                    ? "default"
+                    : "ghost"
+                }
+                className={
+                  location.pathname === "/ajustes/mantenimiento-lubricacion"
+                    ? "w-full justify-start bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                    : "w-full justify-start text-gray-600 hover:bg-gray-50 text-sm"
+                }
+                asChild
+              >
+                <Link to="/ajustes/mantenimiento-lubricacion">
+                  Mantenimiento y Lubricación
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
 
         <Button
           variant={location.pathname === "/spc" ? "default" : "ghost"}

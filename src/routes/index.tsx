@@ -14,6 +14,13 @@ import PerfilesGraficas from "../features/inyeccion/PerfilesGraficas";
 import AjusteVariables from "../features/inyeccion/AjusteVariables";
 import ControlCarga from "../features/charge/ControlCarga";
 import AjusteAvanzado from "../features/charge/AjusteAvanzado";
+import MovimientoFuerza from "../features/boquilla/MovimientoFuerza";
+import ControlZonas from "../features/temperatura/ControlZonas";
+import AjustesPID from "../features/temperatura/AjustesPID";
+import EficienciaEnergetica from "../features/temperatura/EficienciaEnergetica";
+import AjustesProduccion from "../features/AjustesProduccion";
+import MantenimientoLubricacion from "../features/MantenimientoLubricacion";
+import SPC from "../features/SPC";
 
 export const router = createBrowserRouter([
   {
@@ -83,6 +90,34 @@ export const router = createBrowserRouter([
       {
         path: "charge/ajuste-avanzado",
         element: <AjusteAvanzado />,
+      },
+      {
+        path: "boquilla/movimiento-fuerza",
+        element: <MovimientoFuerza />,
+      },
+      {
+        path: "temperatura/control-zonas",
+        element: <ControlZonas />,
+      },
+      {
+        path: "temperatura/ajustes-pid",
+        element: <AjustesPID />,
+      },
+      {
+        path: "temperatura/eficiencia-energetica",
+        element: <EficienciaEnergetica />,
+      },
+      {
+        path: "ajustes/ajustes-produccion",
+        element: <AjustesProduccion />,
+      },
+      {
+        path: "ajustes/mantenimiento-lubricacion",
+        element: <MantenimientoLubricacion />,
+      },
+      {
+        path: "spc",
+        element: <SPC />,
       },
     ],
   },

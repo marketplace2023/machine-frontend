@@ -14,7 +14,6 @@ import {
   Thermometer,
   Sliders,
   BarChart3,
-  Wrench,
 } from "lucide-react";
 import { useState } from "react";
 
